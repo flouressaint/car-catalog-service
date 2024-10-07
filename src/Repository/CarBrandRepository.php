@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\CarBrand;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -11,9 +12,30 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CarBrandRepository extends ServiceEntityRepository
 {
+    use RepositoryModifyTrait;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CarBrand::class);
+    }
+
+    public function findAllSortedByName(): array
+    {
+        return $this->findBy([], ['name' => Criteria::ASC]);
+    }
+
+    public function getCarBrandById(int $id): CarBrand
+    {
+        $auditroium = $this->find($id);
+        if (null == $auditroium) {
+            throw new \DomainException("Car brand with id {$id} not found");
+        }
+
+        return $auditroium;
+    }
+
+    public function existsByName(string $name): bool
+    {
+        return null !== $this->findOneBy(['name' => $name]);
     }
 
     //    /**

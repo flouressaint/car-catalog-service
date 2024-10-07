@@ -15,10 +15,6 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class AuthController extends AbstractController
 {
-    public function __construct(private readonly AuthService $authService)
-    {
-    }
-
     #[Route('/api/v1/auth/me', name:'')]
     public function me(#[CurrentUser] UserInterface $user): JsonResponse
     {
