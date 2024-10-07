@@ -18,21 +18,4 @@ class AuthService
         private readonly UserRepository $userRepository,
     ) {
     }
-
-    public function signUp(SignUpRequest $signUpRequest): Response
-    {
-        if ($this->userRepository->existsByUsername($signUpRequest->getUsername())) {
-            throw new \DomainException("User already exists", Response::HTTP_CONFLICT);
-        }
-
-        $user = (new User())
-            ->setRoles(['ROLE_USER'])
-            ->setUsername($signUpRequest->getUsername());
-
-        $user->setPassword($this->hasher->hashPassword($user, $signUpRequest->getPassword()));
-
-        $this->userRepository->saveAndCommit($user);
-
-        return new JsonResponse(null, Response::HTTP_CREATED);
-    }
 }
