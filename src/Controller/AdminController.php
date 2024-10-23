@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Model\CreateCarBrandRequest;
-use App\Model\CreateCarRequest;
-use App\Model\UpdateCarBrandRequest;
-use App\Model\UpdateCarRequest;
+use App\Model\Car\CreateCarRequest;
+use App\Model\Car\UpdateCarRequest;
+use App\Model\CarBrand\UpdateCarBrandRequest;
 use App\Service\CarBrandService;
 use App\Service\CarService;
+use App\Model\CarBrand\CreateCarBrandRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;

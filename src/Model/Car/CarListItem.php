@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Model\Car;
+
+use App\Model\CarBrand\CarBrandListItem;
 
 class CarListItem
 {

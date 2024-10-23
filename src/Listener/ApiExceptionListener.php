@@ -24,14 +24,29 @@ class ApiExceptionListener
         private readonly ExceptionMappingResolver $resolver,
         private readonly LoggerInterface $logger,
         private readonly SerializerInterface $serializer,
+        private readonly bool $isDebug = false
     ) {
     }
 
     public function __invoke(ExceptionEvent $event): void
     {
         $throwable = $event->getThrowable();
+        if ($this->isSecurityException($throwable)) {
+            return;
+        }
+        if ($throwable->getPrevious() instanceof ValidationFailedException) {
+            $data = $this->serializer->serialize(
+                new ErrorResponse($throwable->getMessage()),
+                JsonEncoder::FORMAT,
+            );
+
+            $event->setResponse(new JsonResponse($data, Response::HTTP_UNPROCESSABLE_ENTITY, [], true));
+
+            return;
+        }
         $mapping = $this->resolver->resolve($throwable::class);
         if (null === $mapping) {
+            return;
             $mapping = ExceptionMapping::fromCode(Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
@@ -42,7 +57,7 @@ class ApiExceptionListener
             ]);
         }
 
-        $message = $mapping->isHidden()
+        $message = $mapping->isHidden() && !$this->isDebug
             ? Response::$statusTexts[$mapping->getCode()]
             : $throwable->getMessage();
 

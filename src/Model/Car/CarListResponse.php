@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Model\Car;
 
-class CarBrandListResponse
+class CarListResponse
 {
     /**
-     * @param CarBrandListItem[] $items
+     * @param CarListItem[] $items
      */
     public function __construct(
         private readonly array $items
@@ -15,7 +15,7 @@ class CarBrandListResponse
     }
 
     /**
-     * @return CarBrandListItem[]
+     * @return CarListItem[]
      */
     public function getItems(): array
     {

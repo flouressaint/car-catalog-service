@@ -6,12 +6,12 @@ namespace App\Service;
 
 use App\Entity\Car;
 use App\Exception\CarAlreadyExistsException;
-use App\Model\CarBrandListItem;
-use App\Model\CarListItem;
-use App\Model\CarListResponse;
-use App\Model\CreateCarRequest;
+use App\Model\Car\CarListItem;
+use App\Model\Car\CarListResponse;
+use App\Model\Car\CreateCarRequest;
+use App\Model\Car\UpdateCarRequest;
+use App\Model\CarBrand\CarBrandListItem;
 use App\Model\IdResponse;
-use App\Model\UpdateCarRequest;
 use App\Repository\CarBrandRepository;
 use App\Repository\CarRepository;
 
@@ -39,17 +39,10 @@ class CarService
         return new CarListResponse($items);
     }
 
-    // public function getCar(int $id): CarListItem
-    // {
-    //     $car = $this->carRepository->getCarById($id);
-
-    //     return new CarListItem($car->getId(), $car->getName());
-    // }
-
     public function createCar(CreateCarRequest $request): IdResponse
     {
         if ($this->carRepository->exists($request->getBrandId(), $request->getModel(), $request->getLeftHandDrive())) {
-            throw new \DomainException("Car {$request->getModel()} already exists");
+            throw new CarAlreadyExistsException();
         }
 
         $car = (new Car())
@@ -64,8 +57,14 @@ class CarService
     public function updateCar(int $id, UpdateCarRequest $request): void
     {
         $car = $this->carRepository->getCarById($id);
-        if ($this->carRepository->exists($request->getBrandId(), $request->getModel(), $request->getLeftHandDrive())) {
-            throw new \DomainException("Car {$request->getModel()} already exists");
+        $duplicate = $this->carRepository->findOneBy(
+            ['model' => $request->getModel(),
+            'brand' => $this->carBrandRepository->getCarBrandById($request->getBrandId()),
+            'leftHandDrive' => $request->getLeftHandDrive()]
+        );
+
+        if ($duplicate && $duplicate->getId() !== $id) {
+            throw new CarAlreadyExistsException();
         }
         if (null !== $request->getModel()) {
             $car->setModel($request->getModel());

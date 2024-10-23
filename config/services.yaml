@@ -7,6 +7,8 @@ parameters:
     exceptions:
         App\Exception\CarBrandAlreadyExistsException: {code: 409, hidden: false, loggable: true}
         App\Exception\CarBrandNotFoundException: {code: 404, hidden: false, loggable: true}
+        App\Exception\CarAlreadyExistsException: {code: 409, hidden: false, loggable: true}
+        App\Exception\CarNotFoundException: {code: 404, hidden: false, loggable: true}
 
 services:
     # default configuration for services in *this* file

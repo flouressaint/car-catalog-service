@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Car;
+use App\Exception\CarNotFoundException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -34,7 +35,7 @@ class CarRepository extends ServiceEntityRepository
     {
         $car = $this->find($id);
         if (null == $car) {
-            throw new \DomainException("Car brand with id {$id} not found");
+            throw new CarNotFoundException();
         }
 
         return $car;

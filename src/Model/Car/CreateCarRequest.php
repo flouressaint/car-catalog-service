@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Model\Car;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class UpdateCarRequest
+class CreateCarRequest
 {
     #[Assert\NotBlank(message: 'Model cannot be empty')]
     private string $model;

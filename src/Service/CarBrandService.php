@@ -7,11 +7,11 @@ namespace App\Service;
 use App\Entity\CarBrand;
 use App\Exception\CarBrandAlreadyExistsException;
 use App\Exception\CustomException;
-use App\Model\CarBrandListItem;
-use App\Model\CarBrandListResponse;
-use App\Model\CreateCarBrandRequest;
+use App\Model\CarBrand\CarBrandListItem;
+use App\Model\CarBrand\CarBrandListResponse;
+use App\Model\CarBrand\CreateCarBrandRequest;
+use App\Model\CarBrand\UpdateCarBrandRequest;
 use App\Model\IdResponse;
-use App\Model\UpdateCarBrandRequest;
 use App\Repository\CarBrandRepository;
 use DomainException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -45,7 +45,7 @@ class CarBrandService
         return new CarBrandListItem($carBrand->getId(), $carBrand->getName());
     }
 
-    public function createCarBrand(CreateCarBrandRequest $request): JsonResponse
+    public function createCarBrand(CreateCarBrandRequest $request): IdResponse
     {
         if ($this->carBrandRepository->existsByName($request->getName())) {
             throw new CarBrandAlreadyExistsException();
@@ -54,7 +54,7 @@ class CarBrandService
         $carBrand = (new CarBrand())->setName($request->getName());
         $this->carBrandRepository->saveAndCommit($carBrand);
 
-        return new JsonResponse(null, Response::HTTP_CREATED);
+        return new IdResponse($carBrand->getId());
     }
 
     public function updateCarBrand(int $id, UpdateCarBrandRequest $request): void
