@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\CarBrand;
+use App\Exception\CarBrandNotFoundException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
@@ -25,12 +26,12 @@ class CarBrandRepository extends ServiceEntityRepository
 
     public function getCarBrandById(int $id): CarBrand
     {
-        $auditroium = $this->find($id);
-        if (null == $auditroium) {
-            throw new \DomainException("Car brand with id {$id} not found");
+        $carBrand = $this->find($id);
+        if (null == $carBrand) {
+            throw new CarBrandNotFoundException();
         }
 
-        return $auditroium;
+        return $carBrand;
     }
 
     public function existsByName(string $name): bool

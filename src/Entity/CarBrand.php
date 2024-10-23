@@ -21,7 +21,7 @@ class CarBrand
     /**
      * @var Collection<int, Car>
      */
-    #[ORM\OneToMany(targetEntity: Car::class, mappedBy: 'brand')]
+    #[ORM\OneToMany(targetEntity: Car::class, mappedBy: 'brand', orphanRemoval: true)]
     private Collection $cars;
 
     public function __construct()

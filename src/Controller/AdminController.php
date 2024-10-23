@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Model\CreateCarBrandRequest;
+use App\Model\CreateCarRequest;
 use App\Model\UpdateCarBrandRequest;
+use App\Model\UpdateCarRequest;
 use App\Service\CarBrandService;
+use App\Service\CarService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -14,6 +17,7 @@ class AdminController extends AbstractController
 {
     public function __construct(
         private readonly CarBrandService $carBrandService,
+        private readonly CarService $carService
     ) {
     }
     #[Route('/api/v1/admin/car-brand', methods: ['GET'])]
@@ -44,5 +48,24 @@ class AdminController extends AbstractController
         return $this->json(null);
     }
 
+    #[Route('/api/v1/admin/car', methods: ['GET'])]
+    public function getCars(): JsonResponse
+    {
+        return $this->json($this->carService->getCars());
+    }
+
+    #[Route('/api/v1/admin/car', methods: ['POST'])]
+    public function createCar(#[MapRequestPayload] CreateCarRequest $request): JsonResponse
+    {
+        return $this->json($this->carService->createCar($request));
+    }
+
+    #[Route('/api/v1/admin/car/{id}', requirements: ['id' => '\d+'], methods: ['PUT'])]
+    public function updateCar(int $id, #[MapRequestPayload] UpdateCarRequest $request): JsonResponse
+    {
+        $this->carService->updateCar($id, $request);
+
+        return $this->json(null);
+    }
 
 }
