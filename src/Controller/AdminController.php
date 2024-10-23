@@ -68,4 +68,12 @@ class AdminController extends AbstractController
         return $this->json(null);
     }
 
+    #[Route("/api/v1/admin/car/{id}", requirements: ['id' => '\d+'], methods: ['DELETE'])]
+    public function deleteCar(int $id): JsonResponse
+    {
+        $this->carService->deleteCar($id);
+
+        return $this->json(null);
+    }
+
 }
