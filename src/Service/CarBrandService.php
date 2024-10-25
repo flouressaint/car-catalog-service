@@ -6,16 +6,12 @@ namespace App\Service;
 
 use App\Entity\CarBrand;
 use App\Exception\CarBrandAlreadyExistsException;
-use App\Exception\CustomException;
 use App\Model\CarBrand\CarBrandListItem;
 use App\Model\CarBrand\CarBrandListResponse;
 use App\Model\CarBrand\CreateCarBrandRequest;
 use App\Model\CarBrand\UpdateCarBrandRequest;
 use App\Model\IdResponse;
 use App\Repository\CarBrandRepository;
-use DomainException;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 class CarBrandService
 {
